@@ -1,0 +1,147 @@
+#include <iostream>
+
+using namespace std;
+
+class vector{
+private:
+	int* items;
+	int size,max;
+    void expand();
+public:
+	vector();
+    vector(int);
+	int getSize();
+	int at(int);
+	int operator[](int);
+	bool insert(int,int);
+	bool remove(int);	
+    //friend ostream& operator<<(ostream&,vector);
+};
+
+void removeDuplicates(vector&);
+bool isSorted(vector);
+void display(vector);
+
+int main() {
+    int testcases,cases , i ,j;
+    cin>>testcases;
+    for(i = 0;  i<testcases ; i++){
+        vector arr;
+        for(j = 0 ; j<10 ; j++){
+            cin>>cases;
+            arr.insert(j,cases);
+            
+        }
+        //display(arr);
+        removeDuplicates(arr);
+        isSorted(arr);
+        display(arr);
+    }
+    
+    return 0;
+
+}
+
+void vector::expand(){
+    int* copy = new int[max];
+    for(int i = 0 ; i<max ; i++){
+        copy[i] = items[i] ; 
+    }
+    delete[] items;
+    items = new int[max+5];
+    for(int i = 0 ; i < size ; i++){
+        items[i] = copy[i];
+    }
+    delete[] copy;
+    max+=5;
+}
+
+vector::vector(){
+	size = 0;
+    max = 5;
+    items = new int[max];
+}
+
+
+vector::vector(int x){
+	size = x;
+    max = 5;
+    items = new int[max];
+}
+
+int vector::getSize(){
+	return size;
+}
+
+bool vector::remove(int pos){
+    int i;
+    if(size==0 || pos<0 || pos>size)
+        return false;
+    else{
+        for(i = pos ; i!=size-1 ; i++){
+            items[i] = items[i+1]; 
+        }
+        size--;
+        return true;
+    }
+}
+
+
+int vector::at(int i){
+	return items[i];
+}
+
+int vector::operator[](int i){
+	return items[i];
+}
+
+bool vector::insert(int pos , int num){
+    int i;
+    if(pos<0||pos>size)
+        return false;
+    else{
+        if(size==max)
+            expand();
+        //cout<<size<<pos<<endl;
+        for(i = size ; i>pos ; i--){
+            items[i] = items[i-1];
+        }
+        items[i] = num;
+        size++;
+        return true;
+    }
+}
+
+
+void removeDuplicates(vector& a){
+	for(int i=0; i<a.getSize()-1; i++){
+		for(int j=i+1; j<a.getSize();){
+			if(a[i]==a[j])
+				a.remove(j);
+			else
+				j++;
+		}
+	}
+}
+
+bool isSorted(vector arr){
+    int i;
+    if(arr.getSize() == 1){
+        cout<<"NO"<<endl;    
+        return false;
+    }
+    for( i = 0 ;i<arr.getSize()-1 ; i++){
+        if(arr[i]>arr[i+1]){
+            cout<<"NO"<<endl;
+            return false;
+        }
+    }
+    cout<<"YES"<<endl;
+        return true;
+}
+
+void display(vector arr){
+    for(int i = 0 ;i<arr.getSize();i++)
+        cout<<arr[i]<<" ";
+    cout<<endl;
+}

@@ -1,0 +1,123 @@
+#include <iostream>
+
+using namespace std;
+
+#define MAX 20
+
+
+class array{
+    private:
+        int item[MAX];
+        int size;
+    public:
+        array();
+        array(int);
+        int getSize();
+        int at(int);
+        bool insert(int,int);
+        bool remove(int);
+        int operator[](int);
+};
+
+void duplicate(array*);
+void display(array);
+bool isSorted(array);
+
+int main() {
+    int testcases,cases , i ,j;
+    cin>>testcases;
+    for(i = 0;  i<testcases ; i++){
+        array arr;
+        for(j = 0 ; j<10 ; j++){
+            cin>>cases;
+            arr.insert(j,cases);
+        }
+        duplicate(&arr);
+        isSorted(arr);
+        display(arr);
+    }
+    
+    return 0;
+}
+
+array::array(){
+    size = 0;
+}
+array::array(int num){
+    size = MAX;
+    for(int i = 0; i< size ; i++)
+        item[i] = num;
+}
+
+int array::getSize(){
+    return size;
+}
+
+int array::at(int pos){
+    return item[pos];
+}
+
+bool array::insert(int pos , int num){
+    int i;
+    if(size==20 || pos<0 || pos>=20)
+        return false;
+    else{
+        for(i = size ; i!=pos ; i--){
+            item[i+1] = item[i];
+        }
+        item[i] = num;
+        size++;
+        return true;
+    }
+}
+
+bool array::remove(int pos){
+    int i;
+    if(size==0 || pos<0 || pos>=20)
+        return false;
+    else{
+        for(i = pos ; i!=size ; i++){
+            item[i] = item[i+1]; 
+        }
+        size--;
+        return true;
+    }
+}
+
+int array::operator[](int pos){
+    return at(pos);
+}
+
+void display(array arr){
+    for(int i = 0 ;i<arr.getSize();i++)
+        cout<<arr[i]<<" ";
+    cout<<endl;
+}
+
+bool isSorted(array arr){
+    int i;
+    if(arr.getSize() == 1){
+        cout<<"NO"<<endl;    
+        return false;
+    }
+    for( i = 0 ;i<arr.getSize()-1 ; i++){
+        if(arr[i]>arr[i+1]){
+            cout<<"NO"<<endl;
+            return false;
+        }
+    }
+    cout<<"YES"<<endl;
+        return true;
+}
+
+void duplicate(array *arr){
+    for(int i = 0; i < arr->getSize()-1 ; i++){
+        for(int j = i+1 ; j < arr->getSize() ; j++){
+            if((*arr)[i] == (*arr)[j]){
+                arr->remove(j);
+                j--;
+            }
+        }
+    }
+    
+}

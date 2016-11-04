@@ -1,0 +1,173 @@
+#include <map>
+#include <set>
+
+#include <iostream>
+
+using namespace std;
+
+
+template <class T>
+class node{
+public:
+    T item;
+    node<T> *next;
+    node();
+    node(T);
+};
+
+template <class T>
+class stack{
+public:
+private:
+    int size;
+    node<T> *peek;
+    void insert(T);
+public:
+    stack();
+    ~stack();
+    stack(const stack&);
+    void push(T);
+    bool pop();
+    T getPeek();
+    void display();
+};
+
+template <class T>
+void display2(stack<T> s){
+   s.display();
+}
+
+template <class T>
+node<T>::node(){
+   item = 0;
+   next = NULL;
+}
+
+template <class T>
+node<T>::node(T item){
+   this->item = item;
+   next = NULL;
+}
+
+template <class T>
+stack<T>::stack(){
+    size = 0;
+    peek = NULL;
+}
+
+template <class T>
+stack<T>::~stack(){
+    while(size!=0){
+        pop();
+    }
+}
+
+template <class T>
+stack<T>::stack(const stack& s){
+    size = 0;
+    peek = NULL;
+    node<T> *tmp = s.peek;
+    while(tmp!=NULL){
+        insert(tmp->item);
+        tmp = tmp->next;
+    }
+}
+
+//sayup pa ni sir XD huhuhu
+template <class T>
+void stack<T>::insert(T x){
+    node<T> *i = new node<T>(x);
+    if(size == 0){
+        peek = i;
+        peek->next = NULL;
+    }else{
+        peek->next = i;
+        //peek = i
+    }
+    size++;
+}
+
+template <class T>
+T stack<T>::getPeek(){
+    if(size == 0){
+        throw 123;
+    }else{
+        return peek->item;
+    }
+}
+
+template <class T>
+bool stack<T>::pop(){
+    if(size == 0){
+        return false;
+    }else{
+        node<T> *del = peek;
+        peek = del->next;
+        del->next = NULL;
+        delete del;
+        size--;
+        return 0;
+    }
+}
+
+
+template <class T>
+void stack<T>::push(T i){
+    node<T> *item = new node<T>(i);
+    if(size == 0){
+        peek = item;
+        peek->next = NULL;
+    }else{
+        item->next = peek;
+        peek = item;
+    }
+    size++;
+}
+
+template <class T>
+void stack<T>::display(){
+    if(size == 0){
+        cout<<endl;
+    }else{
+        node<T> *tmp = peek;
+        for(;tmp!=NULL;tmp=tmp->next){
+            cout<<tmp->item<<" ";
+        }
+        cout<<endl;
+    }
+}
+
+int main() {
+    int testcases , cases ; 
+    stack<int> s;
+    cin>>testcases;
+    for(;testcases!=0;testcases--){
+        cin>>cases;
+        switch(cases){
+            int i;
+            case 1:
+                cin>>i;
+                s.push(i);
+                s.display();
+                break;
+            case 2:
+                s.pop();
+                s.display();
+                break;
+            case 3:
+                try{
+                    cout<<s.getPeek()<<endl;
+                }catch(int x){
+                    if( x == 123){
+                        cout<<"stack is empty."<<endl;
+                    }
+                }
+                break;
+            default:
+                s.display();
+                break;
+        }
+    }
+    //display2(s);
+    return 0;
+}
